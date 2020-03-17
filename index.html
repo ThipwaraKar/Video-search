@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>YouTube API - Web Services</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">-->
+</head>
+<body>
+    <div class="container-fluid" style="text-align: center; padding: 8px">
+        <div class="form-group">
+           <!-- <form>
+            Search Video: <input type="text" id="search-key" class="form-control" placeholder="Search" style="width: 400px; display:inline">
+            <button type="submit" id="search-button" class="btn btn-primary" style="margin-top: -6px">Search</button>
+            </form>-->
+            <form>
+                <p>Search video:
+                <input id="search-key" type="text"/>
+                <button type="submit" id="search-button" name="search">Search</button>
+                </p>
+            </form>
+        </div>
+        <div id=YouTube></div>
+    </div>
+
+    <!--Script-->
+    <script
+    src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>-->
+    <!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>-->
+</body>
+</html>
+
+<script type="text/javascript">
+$(document).ready(function () {
+    const key = "AIzaSyCfkGKnTfpcNm1XHiUOfDOtCeD9C--Gu6Y"
+    $('form').submit(function(e){
+        e.preventDefault()
+
+        let q = $('#search-key').val()
+
+        $.get('https://www.googleapis.com/youtube/v3/search', {
+            part: 'snippet, id',
+            q,
+            maxResults: 25,
+            type: 'video',
+            key
+    }, function(data){
+        console.log(data)
+        let result = ''
+        data.items.forEach(obj => {
+            var title = obj.snippet.title
+            var thumbnails = obj.snippet.thumbnails.medium.url
+            var id = obj.id.videoId
+            result += '<label>Title: ' + title + '</label><br><img src=' + thumbnails +
+            "><br><label>URL:<a href=https://www.youtube.com/watch?v="+ id + ' target = _blank>https://www.youtube.com/watch?v='+
+            id +'</a></label><br><br>' 
+        })
+        $('#YouTube').html(result);
+        })
+    })
+});
+</script>
